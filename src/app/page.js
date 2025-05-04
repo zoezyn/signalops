@@ -15,13 +15,15 @@ const gptWebSearch = async (setLoading) => {
     model: "gpt-4o",
     tools: [ { type: "web_search_preview" } ],
     tool_choice: { type: "web_search_preview" }, 
-    // input: `Please search for feature requests regarding CrewAI and then provide a list of the URLs. Please do not include any other information.`
-    input: `What's the latest news on electric vehicles?`
+    input: `Please search the web for the most common feature requests regarding CrewAI, with a score from 1-5 for the frequency of the request and a score from 1-5 for the strength of the sentiment behind the request`
+    // input: `What's the latest news on electric vehicles?`
   });
 
   // const response = await client.chat.completions.create({ 
-  //   model: 'sonar-pro', 
   //   // model: 'gpt-4o', 
+  // web_search_options: {
+  //   search_context_size: "low",
+  // },
   //   messages: [
   //     {
   //       role: "user",
