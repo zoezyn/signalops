@@ -1,70 +1,28 @@
 "use client"
 
-import { useEffect, useState } from "react";
-
+import OpenAI from "openai";
 import Image from "next/image";
+import { useEffect } from "react";
 
-import client from './api/getClient';
-
-
-
-const gptWebSearch = async (setLoading) => {
-  setLoading(true);
-
+const gptWebSearch = async () => {
+  const client = new OpenAI();
   const response = await client.responses.create({
-    model: "gpt-4o",
+    model: "gpt-4.1",
     tools: [ { type: "web_search_preview" } ],
-    tool_choice: { type: "web_search_preview" }, 
-    // input: `Please search for feature requests regarding CrewAI and then provide a list of the URLs. Please do not include any other information.`
-    input: `What's the latest news on electric vehicles?`
+    input: "What was a positive news story from today?",
   });
 
-  // const response = await client.chat.completions.create({ 
-  //   model: 'sonar-pro', 
-  //   // model: 'gpt-4o', 
-  //   messages: [
-  //     {
-  //       role: "user",
-  //       content: "Write a one-sentence bedtime story about a unicorn.",
-  //     },
-  //   ],
-  // });
-
-  setLoading(false);
-
-  console.log(response);
-  // console.log(response.output_text);
-  console.log("Annotations:", response.output?.[1]?.content?.[0]?.annotations);
-  return response.output_text;
+  console.log(response.output_text);
 };
 
-
-
-const LoadingIcon = () => (
-  <svg className="animate-spin h-6 w-6 text-gray-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-  </svg>
-);
-
-
-
 export default function Home() {
-  const [searchResult, setSearchResult] = useState();
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    gptWebSearch(setLoading).then(setSearchResult);
+    gptWebSearch();
   }, []);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-
-        <div className="mb-8 max-w-250">
-          {loading ? <LoadingIcon /> : searchResult}
-        </div>
-
         <Image
           className="dark:invert"
           src="/next.svg"
